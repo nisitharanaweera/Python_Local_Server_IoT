@@ -1,15 +1,21 @@
 import paho.mqtt.client as mqtt
 
 # MQTT broker settings
-broker_address = "192.168.100.120"  # Replace with the IP address or hostname of your MQTT broker
-broker_port = 1883  # Default MQTT port
+broker_address = "192.168.100.120"  
+broker_port = 1883  
 
 # MQTT topics to subscribe to
-topics = [("test", 0), ("Temp", 0)]  # Replace with the topics you want to subscribe to
+topics = [("test", 0), ("Temp", 0)]  
 
 # Callback when a message is received
+
+# def on_message(client, userdata, message):
+#     print(f"Received message on topic '{message.topic}': {str(message.payload)}")
+
 def on_message(client, userdata, message):
-    print(f"Received message on topic '{message.topic}': {str(message.payload)}")
+    # Convert the payload from bytes to a string
+    payload_str = message.payload.decode('utf-8')  # Assumes UTF-8 encoding
+    print(f"Received message on topic '{message.topic}': {payload_str}")
 
 # Create an MQTT client
 client = mqtt.Client()
@@ -25,5 +31,5 @@ for topic, qos in topics:
     client.subscribe(topic, qos=qos)
     print(f"Subscribed to topic '{topic}' with QoS {qos}")
 
-# Start the MQTT client loop (this keeps the script running and processes messages)
+
 client.loop_forever()
