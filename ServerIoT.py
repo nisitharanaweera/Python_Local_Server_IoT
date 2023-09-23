@@ -1,6 +1,7 @@
 import paho.mqtt.client as mqtt
 import psycopg2
 import json
+from datetime import datetime
 
 db_params = {
     'dbname': 'IoT_Data',
@@ -34,17 +35,18 @@ def on_message(client, userdata, message):
         humidity = payload_json.get('humid', None)
 
         if temperature is not None and humidity is not None:
+            timestamp = datetime.now()
             # #connecting and creating a cursor object in postgres
             conn = psycopg2.connect(**db_params)
             cursor = conn.cursor()
 
             #Querry building
-            sql = "INSERT INTO public.\"DHT_data\"(temp, humid) VALUES (%s, %s)" 
-            cursor.execute(sql, (temperature, humidity))
+            sql = "INSERT INTO public.\"DHT_data\"(time, temp, humid) VALUES (%s, %s, %s)" 
+            cursor.execute(sql, (timestamp, temperature, humidity))
 
 
             conn.commit()
-            print(f"Data inserted temp:{temperature}, humid:{humidity}")
+            print(f"Data inserted temp:{temperature}, humid:{humidity} at Timestamp: {timestamp} ")
             cursor.close()
             conn.close()
         else:
