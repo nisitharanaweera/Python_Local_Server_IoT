@@ -11,17 +11,15 @@ db_params = {
     'port': '5432'
 }
 
-# MQTT broker settings
+#/////////////////////////////////////////  MQTT broker settings  /////////////////////////////////
+
 broker_address = "192.168.100.120"  
 broker_port = 1883  
 
-# MQTT topics to subscribe to
+#MQTT topics to subscribe to
 topics = [("test", 0), ("testSams", 0)]  
 
-# Callback when a message is received
-
-# def on_message(client, userdata, message):
-#     print(f"Received message on topic '{message.topic}': {str(message.payload)}")
+#///////////////////////////////// Callback when a message is received  /////////////////////////////////
 
 def on_message(client, userdata, message):
     # Convert the payload from bytes to a string
@@ -59,10 +57,8 @@ def on_message(client, userdata, message):
 
 
 
-# Create an MQTT client
+#///////////////////////////////////////////  Create an MQTT client  //////////////////////////////////////
 client = mqtt.Client()
-
-# Set the callback function for when a message is received
 client.on_message = on_message
 
 # Connect to the MQTT broker
